@@ -5,6 +5,7 @@ import TodoList from "./components/Todo/TodoList";
 import TimerDisplay from "./components/Timer/TimerDisplay";
 import Container from "./components/Layout/Container";
 import Header from "./components/Layout/Header";
+import Footer from "./components/Layout/Footer";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="todo" element={<TodoList />} />
         <Route path="timer" element={<TimerDisplay />} />
       </Routes>
+      <Footer />
     </Container>
   );
 }
