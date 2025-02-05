@@ -3,10 +3,26 @@ import styled from "styled-components";
 interface WatchProps {
   minutes: string;
   seconds: string;
+  totalSeconds: number;
+  initialSeconds: number;
 }
-const Watch = ({ seconds, minutes }: WatchProps) => {
+
+// Add this type for the styled component
+interface StyledWrapperProps {
+  timeProgress: number;
+}
+
+const Watch = ({
+  seconds,
+  minutes,
+  totalSeconds,
+  initialSeconds,
+}: WatchProps) => {
+  // Calculate the progress (0 to 1, where 1 is start and 0 is end)
+  const timeProgress = totalSeconds / initialSeconds;
+
   return (
-    <StyledWrapper>
+    <StyledWrapper timeProgress={timeProgress}>
       <div className="watch-container">
         <div className="watch">
           <div className="frame">
@@ -19,8 +35,6 @@ const Watch = ({ seconds, minutes }: WatchProps) => {
           <div className="powerBtn" />
           <div className="dots">
             <span className="dot" />
-            <span className="dot" />
-            <span className="dot" />
           </div>
         </div>
       </div>
@@ -28,12 +42,11 @@ const Watch = ({ seconds, minutes }: WatchProps) => {
   );
 };
 
-const StyledWrapper = styled.div`
+const StyledWrapper = styled.div<StyledWrapperProps>`
   .watch-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 70dvh;
   }
   .watch {
     position: relative;
@@ -43,7 +56,7 @@ const StyledWrapper = styled.div`
   .watch::before {
     content: "";
     width: 10rem;
-    height: 300px;
+    height: 100px;
     background: radial-gradient(circle at 200px, rgb(0, 0, 0), rgb(48, 48, 48));
     box-shadow: inset 0px -10px 18px #ffffffb9, 10px 0px 30px #00000071;
     position: absolute;
@@ -53,7 +66,7 @@ const StyledWrapper = styled.div`
   .watch::before {
     content: "";
     width: 10rem;
-    height: 200px;
+    height: 100px;
     background: radial-gradient(circle at 200px, rgb(0, 0, 0), rgb(48, 48, 48));
     box-shadow: inset 0px 10px 18px #ffffffb9, 10px 0px 30px #00000071;
     position: absolute;
@@ -93,12 +106,44 @@ const StyledWrapper = styled.div`
     flex-direction: column;
   }
   .text {
-    color: #dddf8f;
+    color: ${(props) => {
+      // Interpolate between yellow (#DDDF8F) and red (#FF0000)
+      const yellow = [221, 223, 143];
+      const red = [255, 0, 0];
+      const r = Math.round(
+        red[0] * (1 - props.timeProgress) + yellow[0] * props.timeProgress
+      );
+      const g = Math.round(
+        red[1] * (1 - props.timeProgress) + yellow[1] * props.timeProgress
+      );
+      const b = Math.round(
+        red[2] * (1 - props.timeProgress) + yellow[2] * props.timeProgress
+      );
+      return `rgb(${r}, ${g}, ${b})`;
+    }};
     font-size: 10rem;
     font-family: serif;
     font-weight: bolder;
     line-height: 0.8;
-    text-shadow: 0 0 40px #d7d886c7;
+    text-shadow: 0 0 40px
+      ${(props) => {
+        // Similar interpolation for the glow effect
+        const yellowGlow = [215, 216, 134, 0.78];
+        const redGlow = [255, 0, 0, 0.78];
+        const r = Math.round(
+          redGlow[0] * (1 - props.timeProgress) +
+            yellowGlow[0] * props.timeProgress
+        );
+        const g = Math.round(
+          redGlow[1] * (1 - props.timeProgress) +
+            yellowGlow[1] * props.timeProgress
+        );
+        const b = Math.round(
+          redGlow[2] * (1 - props.timeProgress) +
+            yellowGlow[2] * props.timeProgress
+        );
+        return `rgba(${r}, ${g}, ${b}, ${yellowGlow[3]})`;
+      }};
   }
   .frame::before {
     border: 1px solid #0d0d0d;
