@@ -11,3 +11,10 @@ export interface TimerModeProps {
   mode: Mode;
   onModeChange: (mode: Mode) => void;
 }
+
+export interface Todo {
+  id: string;
+  name: string;
+  description: string;
+  isCompleted: boolean;
+}

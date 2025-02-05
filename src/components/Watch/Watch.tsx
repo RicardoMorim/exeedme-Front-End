@@ -27,8 +27,8 @@ const Watch = ({
         <div className="watch">
           <div className="frame">
             <div className="text">
-              <div>{seconds}</div>
               <div>{minutes}</div>
+              <div>{seconds}</div>
             </div>
           </div>
           <div className="sideBtn" />

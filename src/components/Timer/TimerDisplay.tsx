@@ -10,11 +10,10 @@ export default function TimerDisplay() {
   const [initialTime, setInitialTime] = useState(25 * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
-  const [autoStart, setAutoStart] = useState(false);
+  const [sessionMessage, setSessionMessage] = useState<string | null>(null);
 
-  // Handle notifications
   useEffect(() => {
-    if (time === 3) {
+    if (time === 2) {
       setShowNotification(true);
       const audio = new Audio("/audio/notification.mp3");
       audio.play().catch(() => {});
@@ -27,37 +26,44 @@ export default function TimerDisplay() {
       setTime(25 * 60);
       setInitialTime(25 * 60);
     } else {
-      setTime(5 * 60); // Short break duration
+      setTime(5 * 60); 
       setInitialTime(5 * 60);
     }
-    if (autoStart) {
-      setIsRunning(true);
-    } else {
-      setIsRunning(false);
-    }
-  }, [mode, autoStart]);
+  }, [mode]);
 
-  // Countdown effect: update time every second and switch mode when timer reaches 0
+  // Clear any session message after 3 seconds.
   useEffect(() => {
-    if (!isRunning) return;
-    const timer = setInterval(() => {
-      setTime((prevTime) => {
-        if (prevTime <= 1) {
-          clearInterval(timer);
-          // Determine the next mode:
-          const nextMode: Mode =
-            mode === "pomodoro" ? "shortBreak" : "pomodoro";
-          // Set flag to auto start next mode
-          setAutoStart(true);
-          setMode(nextMode);
-          return 0;
-        }
-        return prevTime - 1;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [isRunning, mode]);
+    if (sessionMessage) {
+      const msgTimer = setTimeout(() => setSessionMessage(null), 3000);
+      return () => clearTimeout(msgTimer);
+    }
+  }, [sessionMessage]);
 
+  // Recursive timeout for countdown.
+  useEffect(() => {
+    if (!isRunning) return; // Do nothing if paused
+
+    const timerId = setTimeout(() => {
+      if (time > 0) {
+        setTime(time - 1);
+      } else {
+        const nextMode: Mode = mode === "pomodoro" ? "shortBreak" : "pomodoro";
+
+        setSessionMessage(
+          nextMode === "pomodoro"
+            ? "Time to work! Let's get started."
+            : "Break time! Relax a bit."
+        );
+
+        // Switch mode. The mode effect will reset the time.
+        setMode(nextMode);
+      }
+    }, 1000);
+
+    return () => clearTimeout(timerId);
+  }, [isRunning, time, mode]);
+
+  // Control handlers
   const handleStart = () => setIsRunning(true);
   const handlePause = () => setIsRunning(false);
   const handleReset = () => {
@@ -69,6 +75,7 @@ export default function TimerDisplay() {
       setTime(5 * 60);
       setInitialTime(5 * 60);
     }
+    setSessionMessage(null);
   };
 
   const formatTime = (seconds: number): string => {
@@ -80,32 +87,38 @@ export default function TimerDisplay() {
   };
 
   return (
-    <div className="flex flex-col items-center py-4 md:py-8 min-h-screen justify-center">
+    <div className="flex flex-col items-center py-8 md:py-16 min-h-screen justify-center bg-gray-50 dark:bg-gray-900">
       {showNotification && (
-        <div className="fixed top-4 right-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-lg shadow-lg animate-bounce">
-          <p className="font-medium">
+        <div className="fixed top-6 right-6 bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-4 rounded-xl shadow-2xl animate-bounce text-xl">
+          <p className="font-bold">
             {mode === "pomodoro"
               ? "Good Job! Take a break! 🎉"
               : "Break's over! Let's focus! 💪"}
           </p>
         </div>
       )}
-      <div className="w-full max-w-md px-4">
+      {sessionMessage && (
+        <div className="mb-6 text-2xl font-semibold text-gray-800 dark:text-gray-200 transition-all duration-300">
+          {sessionMessage}
+        </div>
+      )}
+      <div className="w-full max-w-md px-6 py-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl">
         <TimerMode
           mode={mode}
           onModeChange={(newMode) => {
-            setAutoStart(false); // Manual mode change: don't auto-start
+            // If the user manually changes the mode, pause the timer.
+            setIsRunning(false);
             setMode(newMode);
           }}
         />
         <div
-          className={`my-6 md:my-8 relative aspect-square w-full max-w-xs mx-auto transition-transform duration-300 ${
+          className={`my-10 relative aspect-square w-full max-w-xs mx-auto transition-transform duration-300 ${
             time === 0 ? "animate-shake" : ""
           }`}
         >
           <Watch
-            seconds={formatTime(time).split(":")[0]}
-            minutes={formatTime(time).split(":")[1]}
+            minutes={formatTime(time).split(":")[0]}
+            seconds={formatTime(time).split(":")[1]}
             initialSeconds={initialTime}
             totalSeconds={time}
           />
