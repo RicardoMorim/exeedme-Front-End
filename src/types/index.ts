@@ -18,3 +18,14 @@ export interface Todo {
   description: string;
   isCompleted: boolean;
 }
+
+export type WatchSkin =
+  | "digital"
+  | "analogic"
+  | "analogicClassic"
+  | "analogicSimple"
+  | "fit"
+  | "fitSlim"
+  | "simple"
+  | "StopWatch"
+  | "stop";
