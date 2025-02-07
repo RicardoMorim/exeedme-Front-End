@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Modal } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { useSwipeable } from "react-swipeable";
 import WatchDigital from "../Watch/WatchDigital";
 import WatchAnalogic from "../Watch/WatchAnalogic";
 import WatchAnalogicClassic from "../Watch/WatchAnalogicClassic";
@@ -76,6 +77,14 @@ export default function WatchSkinModal({
     onClose();
   };
 
+  // Swipe handlers to allow dragging between skins
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => handleNextSkin(),
+    onSwipedRight: () => handlePrevSkin(),
+    preventScrollOnSwipe: true,
+    trackMouse: true,
+  });
+
   // Render watch using the temporary skin
   const renderWatch = () => {
     const props = {
@@ -110,7 +119,6 @@ export default function WatchSkinModal({
             }}
           />
         );
-
       default:
         return <WatchDigital {...props} />;
     }
@@ -126,10 +134,10 @@ export default function WatchSkinModal({
       className="watch-skin-modal"
       mask={false}
       keyboard={true}
-
+      styles={{ body: { padding: 0, background: "none", border: "none" } }}
     >
       <div className="p-8 ">
-        <h2 className="text-2xl font-bold text-center text-purple-600  mb-8">
+        <h2 className="text-2xl font-bold text-center text-purple-600 mb-8">
           Choose Watch Style
         </h2>
         {/* Column layout on mobile and a row layout on larger screens */}
@@ -140,8 +148,11 @@ export default function WatchSkinModal({
           >
             <LeftOutlined className="text-xl" />
           </button>
-          {/* Watch container forces an aspect-square and prevents overflow */}
-          <div className="relative flex items-center justify-center w-full max-w-[300px] min-h-[400px] aspect-square">
+          {/* Watch container with animated transition and swipe support */}
+          <div
+            {...swipeHandlers}
+            className="relative flex items-center justify-center w-full max-w-[300px] min-h-[400px] aspect-square transition-transform duration-300"
+          >
             {renderWatch()}
           </div>
           <button
@@ -169,7 +180,7 @@ export default function WatchSkinModal({
         {/* Save and Cancel buttons */}
         <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
           <button
-            onClick={onClose} 
+            onClick={onClose}
             className="px-6 py-3 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-lg shadow-md transition-all"
           >
             Cancel
