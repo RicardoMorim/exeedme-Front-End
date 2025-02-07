@@ -1,11 +1,13 @@
-import { useState } from "react";
 import { Todo } from "../../types";
 import TodoInput from "./TodoInput";
 import TodoItem from "./TodoItem";
 
-export default function TodoList() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+interface todoListProps {
+  todos: Todo[];
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+}
 
+export default function TodoList({ todos, setTodos }: todoListProps) {
   const handleAdd = (newTodo: Todo) => {
     setTodos((prev) => [newTodo, ...prev]);
   };

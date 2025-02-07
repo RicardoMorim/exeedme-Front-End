@@ -12,14 +12,39 @@ import WatchFit from "../Watch/WatchFit";
 import WatchFitSlim from "../Watch/WatchFitSlim";
 import WatchSimple from "../Watch/WatchSimple";
 
-export default function TimerDisplay() {
-  const [mode, setMode] = useState<Mode>("pomodoro");
-  const [time, setTime] = useState(25 * 60);
-  const [initialTime, setInitialTime] = useState(25 * 60);
-  const [isRunning, setIsRunning] = useState(false);
+interface TimerDisplayProps {
+  mode: Mode;
+  setMode: React.Dispatch<React.SetStateAction<Mode>>;
+  time: number;
+  setTime: React.Dispatch<React.SetStateAction<number>>;
+  initialTime: number;
+  setInitialTime: React.Dispatch<React.SetStateAction<number>>;
+  isRunning: boolean;
+  setIsRunning: React.Dispatch<React.SetStateAction<boolean>>;
+  currentSkin: WatchSkin;
+  setCurrentSkin: React.Dispatch<React.SetStateAction<WatchSkin>>;
+}
+
+export default function TimerDisplay({
+  mode,
+  setMode,
+  time,
+  setTime,
+  initialTime,
+  setInitialTime,
+  isRunning,
+  setIsRunning,
+  currentSkin,
+  setCurrentSkin,
+}: TimerDisplayProps) {
   const [showNotification, setShowNotification] = useState(false);
-  const [currentSkin, setCurrentSkin] = useState<WatchSkin>("digital");
   const [isSkinModalOpen, setIsSkinModalOpen] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      setIsRunning(false);
+    };
+  }, [setIsRunning]);
 
   useEffect(() => {
     if (time === 2) {
@@ -30,33 +55,21 @@ export default function TimerDisplay() {
     }
   }, [time]);
 
-  useEffect(() => {
-    if (mode === "pomodoro") {
-      setTime(25 * 60);
-      setInitialTime(25 * 60);
-    } else {
-      setTime(5 * 60);
-      setInitialTime(5 * 60);
-    }
-  }, [mode]);
-
   // Recursive timeout for countdown.
   useEffect(() => {
-    if (!isRunning) return; // Do nothing if paused
+    if (!isRunning) return;
 
-    const timerId = setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       if (time > 0) {
         setTime(time - 1);
       } else {
         const nextMode: Mode = mode === "pomodoro" ? "shortBreak" : "pomodoro";
-
-        // Switch mode. The mode effect will reset the time.
         setMode(nextMode);
       }
     }, 1000);
 
-    return () => clearTimeout(timerId);
-  }, [isRunning, time, mode]);
+    return () => clearTimeout(timeoutId);
+  }, [isRunning, time, mode, setMode, setTime]);
 
   // Control handlers
   const handleStart = () => setIsRunning(true);

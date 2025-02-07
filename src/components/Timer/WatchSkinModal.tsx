@@ -49,18 +49,32 @@ export default function WatchSkinModal({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Use a temporary local state for the skin.
+  const [tempSkin, setTempSkin] = useState<WatchSkin>(currentSkin);
+  useEffect(() => {
+    if (isOpen) {
+      setTempSkin(currentSkin);
+    }
+  }, [isOpen, currentSkin]);
+
   const handlePrevSkin = () => {
-    const currentIndex = skins.findIndex((s) => s.id === currentSkin);
+    const currentIndex = skins.findIndex((s) => s.id === tempSkin);
     const prevIndex = (currentIndex - 1 + skins.length) % skins.length;
-    onSkinChange(skins[prevIndex].id);
+    setTempSkin(skins[prevIndex].id);
   };
 
   const handleNextSkin = () => {
-    const currentIndex = skins.findIndex((s) => s.id === currentSkin);
+    const currentIndex = skins.findIndex((s) => s.id === tempSkin);
     const nextIndex = (currentIndex + 1) % skins.length;
-    onSkinChange(skins[nextIndex].id);
+    setTempSkin(skins[nextIndex].id);
   };
 
+  const handleSave = () => {
+    onSkinChange(tempSkin);
+    onClose();
+  };
+
+  // Render watch using the temporary skin
   const renderWatch = () => {
     const props = {
       minutes: time.minutes,
@@ -69,7 +83,7 @@ export default function WatchSkinModal({
       totalSeconds,
     };
 
-    switch (currentSkin) {
+    switch (tempSkin) {
       case "digital":
         return <WatchDigital {...props} />;
       case "analogic":
@@ -99,10 +113,10 @@ export default function WatchSkinModal({
       className="watch-skin-modal"
     >
       <div className="p-8">
-        <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-gray-200 mb-8">
+        <h2 className="text-2xl font-bold text-center text-purple-600  mb-8">
           Choose Watch Style
         </h2>
-        {/* Use a column layout on mobile and a row layout on larger screens */}
+        {/* Column layout on mobile and a row layout on larger screens */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 min-h-[400px]">
           <button
             onClick={handlePrevSkin}
@@ -125,9 +139,9 @@ export default function WatchSkinModal({
           {skins.map(({ id, label }) => (
             <button
               key={id}
-              onClick={() => onSkinChange(id)}
+              onClick={() => setTempSkin(id)}
               className={`px-4 py-2 rounded-lg transition-all ${
-                currentSkin === id
+                tempSkin === id
                   ? "bg-purple-600 text-white"
                   : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
@@ -135,6 +149,21 @@ export default function WatchSkinModal({
               {label}
             </button>
           ))}
+        </div>
+        {/* Save and Cancel buttons */}
+        <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+          <button
+            onClick={onClose} // Cancel simply closes without applying changes
+            className="px-6 py-3 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-lg shadow-md transition-all"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow-md transition-all"
+          >
+            Save
+          </button>
         </div>
       </div>
     </Modal>
