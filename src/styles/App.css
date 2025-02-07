@@ -7,6 +7,23 @@
 }
 
 .ant-modal-content {
-  backdrop-filter: blur(5px);
-  background-color: rgba(38, 38, 46, 0.123) !important;
+  backdrop-filter: blur(15px);
+  background-color: rgba(31, 31, 44, 0.158) !important;
+}
+
+.watch-skin-modal .slick-list {
+  height: 400px !important;
+  display: flex !important;
+  align-items: center;
+}
+.watch-skin-modal .slick-track {
+  height: 400px !important;
+  display: flex !important;
+  align-items: center;
+}
+.watch-skin-modal .slick-slide {
+  height: 400px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
