@@ -1,4 +1,3 @@
-import React from "react";
 import { TimerControlsProps } from "../../types/index";
 import { FaPlay, FaPause, FaRedo } from "react-icons/fa";
 
