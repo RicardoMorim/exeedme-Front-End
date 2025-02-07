@@ -27,5 +27,5 @@ export type WatchSkin =
   | "fit"
   | "fitSlim"
   | "simple"
-  | "StopWatch"
+  | "SimpleStopWatch"
   | "stop";

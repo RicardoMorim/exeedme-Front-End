@@ -11,6 +11,7 @@ import WatchAnalogicSimple from "../Watch/WatchAnalogicSimple";
 import WatchFit from "../Watch/WatchFit";
 import WatchFitSlim from "../Watch/WatchFitSlim";
 import WatchSimple from "../Watch/WatchSimple";
+import SimpleStopwatch from "../Watch/SimpleStopWatch";
 
 interface TimerDisplayProps {
   mode: Mode;
@@ -120,6 +121,16 @@ export default function TimerDisplay({
         return <WatchFitSlim {...props} />;
       case "simple":
         return <WatchSimple {...props} />;
+      case "SimpleStopWatch":
+        return (
+          <SimpleStopwatch
+            {...{
+              ...props,
+              minutes: parseInt(props.minutes),
+              seconds: parseInt(props.seconds),
+            }}
+          />
+        );
       default:
         return <WatchDigital {...props} />;
     }

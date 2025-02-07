@@ -9,6 +9,7 @@ import WatchFit from "../Watch/WatchFit";
 import WatchFitSlim from "../Watch/WatchFitSlim";
 import WatchSimple from "../Watch/WatchSimple";
 import { WatchSkin } from "../../types";
+import SimpleStopwatch from "../Watch/SimpleStopWatch";
 
 interface WatchSkinModalProps {
   isOpen: boolean;
@@ -37,6 +38,7 @@ export default function WatchSkinModal({
     { id: "fit", label: "Fit" },
     { id: "fitSlim", label: "Fit Slim" },
     { id: "simple", label: "Simple" },
+    { id: "SimpleStopWatch", label: "StopWatch" },
   ];
 
   const [modalWidth, setModalWidth] = useState(800);
@@ -98,6 +100,17 @@ export default function WatchSkinModal({
         return <WatchFitSlim {...props} />;
       case "simple":
         return <WatchSimple {...props} />;
+      case "SimpleStopWatch":
+        return (
+          <SimpleStopwatch
+            {...{
+              ...props,
+              minutes: parseInt(time.minutes),
+              seconds: parseInt(time.seconds),
+            }}
+          />
+        );
+
       default:
         return <WatchDigital {...props} />;
     }
@@ -111,8 +124,11 @@ export default function WatchSkinModal({
       width={modalWidth}
       centered
       className="watch-skin-modal"
+      mask={false}
+      keyboard={true}
+
     >
-      <div className="p-8">
+      <div className="p-8 ">
         <h2 className="text-2xl font-bold text-center text-purple-600  mb-8">
           Choose Watch Style
         </h2>
@@ -153,7 +169,7 @@ export default function WatchSkinModal({
         {/* Save and Cancel buttons */}
         <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
           <button
-            onClick={onClose} // Cancel simply closes without applying changes
+            onClick={onClose} 
             className="px-6 py-3 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-lg shadow-md transition-all"
           >
             Cancel
