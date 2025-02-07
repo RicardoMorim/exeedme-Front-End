@@ -2,12 +2,12 @@ import { Todo } from "../../types";
 import TodoInput from "./TodoInput";
 import TodoItem from "./TodoItem";
 
-interface todoListProps {
+interface TodoListProps {
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 }
 
-export default function TodoList({ todos, setTodos }: todoListProps) {
+export default function TodoList({ todos, setTodos }: TodoListProps) {
   const handleAdd = (newTodo: Todo) => {
     setTodos((prev) => [newTodo, ...prev]);
   };
@@ -22,6 +22,12 @@ export default function TodoList({ todos, setTodos }: todoListProps) {
 
   const handleDelete = (id: string) => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
+  };
+
+  const handleEdit = (updatedTodo: Todo) => {
+    setTodos((prev) =>
+      prev.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo))
+    );
   };
 
   return (
@@ -48,6 +54,7 @@ export default function TodoList({ todos, setTodos }: todoListProps) {
                 todo={todo}
                 onToggle={handleToggle}
                 onDelete={handleDelete}
+                onEdit={handleEdit}
               />
             ))
           )}
