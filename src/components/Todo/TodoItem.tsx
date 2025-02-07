@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FiTrash2, FiEdit, FiCheck, FiX } from "react-icons/fi";
 import { Todo } from "../../types";
 
@@ -9,7 +9,12 @@ interface TodoItemProps {
   onEdit: (updatedTodo: Todo) => void;
 }
 
-export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
+export default function TodoItem({
+  todo,
+  onToggle,
+  onDelete,
+  onEdit,
+}: TodoItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(todo.name);
   const [editDescription, setEditDescription] = useState(todo.description);
@@ -78,7 +83,12 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
               )}
             </button>
