@@ -5,19 +5,8 @@ export default function Footer() {
         <p className="text-center text-sm md:text-base">
           © {new Date().getFullYear()} Ricardo Morim
           <span className="mx-2">•</span>
-          <span className="opacity-90">ExeedMe</span>
+          <span className="opacity-90">ExeedMe Challenge</span>
         </p>
-        <div className="mt-4 flex flex-col md:flex-row justify-center items-center gap-4 md:gap-6">
-          <a href="#" className="hover:text-purple-200 transition-colors">
-            Privacy Policy
-          </a>
-          <a href="#" className="hover:text-purple-200 transition-colors">
-            Terms of Service
-          </a>
-          <a href="#" className="hover:text-purple-200 transition-colors">
-            Contact Us
-          </a>
-        </div>
       </div>
     </footer>
   );
