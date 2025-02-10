@@ -46,6 +46,8 @@ export default function WatchSkinModal({
   );
 
   const [modalWidth, setModalWidth] = useState(800);
+
+  // modal size based on width
   useEffect(() => {
     const handleResize = () => {
       setModalWidth(window.innerWidth < 640 ? window.innerWidth * 0.95 : 800);

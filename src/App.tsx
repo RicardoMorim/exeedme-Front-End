@@ -3,7 +3,6 @@ import "./styles/App.css";
 import Home from "./components/Home/Home";
 import TodoList from "./components/Todo/TodoList";
 import TimerDisplay from "./components/Timer/TimerDisplay";
-import Container from "./components/Layout/Container";
 import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
 import { useTimer } from "./hooks/useTimer";
@@ -14,7 +13,7 @@ function App() {
   const timerProps = useTimer();
 
   return (
-    <Container>
+    <div className="min-h-screen">
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -25,7 +24,7 @@ function App() {
         <Route path="timer" element={<TimerDisplay {...timerProps} />} />
       </Routes>
       <Footer />
-    </Container>
+    </div>
   );
 }
 
