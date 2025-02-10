@@ -43,7 +43,8 @@
 │   ├── main.tsx
 |   ├── App.tsx
 │   ├── styles/
-│   └── types/
+│   ├── types/
+│   └── Hooks/
 ├── tailwind.config.js
 ├── tsconfig.app.json
 ├── tsconfig.json

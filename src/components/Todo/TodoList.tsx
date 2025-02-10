@@ -34,7 +34,7 @@ export default function TodoList({ todos, setTodos }: TodoListProps) {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 py-10 px-4">
       <div className="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-8">
         <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-8 text-center font-serif">
-          ✨ Todo List
+          ✨ To Do List
         </h1>
         <TodoInput onAdd={handleAdd} />
         <div className="mt-8 space-y-3">

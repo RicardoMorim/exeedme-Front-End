@@ -34,7 +34,7 @@ describe("TodoList component", () => {
 
   it("renders empty state when no todos exist", () => {
     renderTodoList();
-    expect(screen.getByText(/✨ Todo List/i)).toBeInTheDocument();
+    expect(screen.getByText(/✨ To Do List/i)).toBeInTheDocument();
     expect(
       screen.getByText(/all clear! ready to start planning\?/i)
     ).toBeInTheDocument();
