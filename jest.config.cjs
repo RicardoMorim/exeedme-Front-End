@@ -8,12 +8,18 @@ module.exports = {
   },
   setupFilesAfterEnv: ["<rootDir>/src/test/setupTests.tsx"],
   moduleNameMapper: {
-    "\\.(css|less|scss|sass)$": "identity-obj-proxy"
+    "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+    "^url$": "<rootDir>/node_modules/whatwg-url"
   },
+  transformIgnorePatterns: [
+    "/node_modules/(?!whatwg-url|tr46)/"
+  ],
   testEnvironmentOptions: {
-    customExportConditions: [""]
+    customExportConditions: [""],
+    url: "http://localhost"
   },
   silent: true,
   verbose: false,
-  maxWorkers: "50%"
-};
+  maxWorkers: "50%",
+  setupFiles: ["<rootDir>/src/test/jest.setup.js"]
+}
