@@ -11,19 +11,36 @@
   background-color: rgba(31, 31, 44, 0.158) !important;
 }
 
+/* Update the watch-skin-modal styles */
 .watch-skin-modal .slick-list {
-  height: 400px !important;
-  display: flex !important;
-  align-items: center;
+  height: 200px !important;
 }
+
+@media (min-width: 640px) {
+  .watch-skin-modal .slick-list {
+    height: 400px !important;
+  }
+}
+
 .watch-skin-modal .slick-track {
-  height: 400px !important;
-  display: flex !important;
-  align-items: center;
+  height: 100% !important;
 }
+
 .watch-skin-modal .slick-slide {
-  height: 400px !important;
+  height: 100% !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+}
+
+.watch-skin-modal .slick-slide > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  transform: none !important;
+}
+
+.watch-skin-modal .slick-slide.slick-active {
+  z-index: 1;
 }
